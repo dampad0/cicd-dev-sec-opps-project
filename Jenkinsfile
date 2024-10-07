@@ -20,7 +20,7 @@ pipeline{
         }
         stage('Checkout from Git'){
             steps{
-                git branch: 'dev-sec-ops-cicd-pipeline-project-one', url: 'https://github.com/awanmbandi/realworld-microservice-project.git'
+                git branch: 'main', url: 'https://github.com/dampad0/cicd-dev-sec-opps-project.git'
             }
         }
         stage('Install Dependencies') {
@@ -59,15 +59,15 @@ pipeline{
                 script{
                    withDockerRegistry(credentialsId: 'DockerHub-Credential', toolName: 'Docker'){
                        sh "docker build -t reddit ."
-                       sh "docker tag reddit awanmbandi/reddit:latest "
-                       sh "docker push awanmbandi/reddit:latest "
+                       sh "docker tag reddit dampad0/reddit:latest "
+                       sh "docker push dampad0/reddit:latest "
                     }
                 }
             }
         }
         stage("Trivy App Image Scan"){
             steps{
-                sh "trivy image awanmbandi/reddit:latest > trivy_image_analysis_report.txt"
+                sh "trivy image dampad0/reddit:latest > trivy_image_analysis_report.txt"
             }
         }
         stage('Deploy to K8S Stage Environment'){
@@ -109,7 +109,7 @@ pipeline{
     post {
     always {
         echo 'Slack Notifications.'
-        slackSend channel: '#general', //update and provide your channel name
+        slackSend channel: 'db-multi-microservices-alert', //update and provide your channel name
         color: COLOR_MAP[currentBuild.currentResult],
         message: "*${currentBuild.currentResult}:* Job Name '${env.JOB_NAME}' build ${env.BUILD_NUMBER} \n Build Timestamp: ${env.BUILD_TIMESTAMP} \n Project Workspace: ${env.WORKSPACE} \n More info at: ${env.BUILD_URL}"
     }
