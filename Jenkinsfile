@@ -58,7 +58,7 @@ pipeline{
             steps{
                 script{
                    withDockerRegistry(credentialsId: 'DockerHub-Credential', toolName: 'Docker'){
-                       sh "docker build -t reddit ."
+                       sh "docker build -t dampad0/reddit:latest . "
                        sh "docker tag reddit dampad0/reddit:latest "
                        sh "docker push dampad0/reddit:latest "
                     }
